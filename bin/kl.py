@@ -9,14 +9,8 @@ import profile
 # then put the resulting csv into R and compute KL like this:
 #   kl<-lbeta(a,b)-lbeta(c,d)-(a-c)*digamma(c)-(b-d)*digamma(d)+(a-c+b-d)*digamma(c+d)
 
-def listFactory():
-	return 4*[1]
-
-#def codehere():
-
 inData = splunk.Intersplunk.readResults( None, None, False )
 outData = []
-
 
 nodes = collections.defaultdict( lambda: 4*[1] )
 
@@ -33,8 +27,6 @@ for jobIter in inData:
 		for nodeIter in jobIter[ 'host' ].split( ',' ):
 			nodes[ nodeIter ][ 2 ] = 1 + nodes[ nodeIter ][ 2 ]	# ++c
 
-
-
 for nodeIter in nodes.iterkeys():
 	if nodeIter.__len__() > 0:
 		nodes[ nodeIter ][ 1 ] = 1 + passedJobCount - nodes[ nodeIter ][ 0 ]	# find b
@@ -48,8 +40,3 @@ for nodeIter in nodes.iterkeys():
 		outData.append( newOutDataRow )
 
 splunk.Intersplunk.outputResults( outData )
-
-
-# profile.run( 'codehere();' )
-#codehere();
-
